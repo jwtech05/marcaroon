@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<?php require('view/header.php') ?> 
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 
@@ -42,27 +43,44 @@ body {font-family: Arial, Helvetica, sans-serif;}
   cursor: pointer;
 }
 </style>
-    <?php
+<?php
 $servername = "localhost";
 $username = "root";
 $password = "pchris3528p!!";
 $dbname = "opentutorials";
 
 $mysqli = new mysqli($servername, $username, $password, $dbname);
+
 $id = $_GET["id"];
 
+$status = session_status();
+if($status == PHP_SESSION_NONE){
+    //There is no active session
+    echo "세션연결 끊김";
+}else if($status == PHP_SESSION_DISABLED){
+    //Sessions are not available
+}else if($status == PHP_SESSION_ACTIVE){
+    //Destroy current and start new on
+}
+
+if(isset($_SESSION['memberId'])){
+    $signer = $_SESSION['memberId'];
+}else{
+    $signer = $_COOKIE['비가입자'];
+}
+echo $signer;
 $sql = "
     SELECT * FROM product WHERE productId='{$id}'
 ";
 $result = mysqli_query($mysqli, $sql);
 $row = mysqli_fetch_array($result);
-
+$productId = $row['productId'];
 $name = $row['pName'];
 $price = $row['price'];
 $picture = $row['picture'];
 $description = $row['description'];
 
-         require('view/header.php')
+     
       ?>
          <!-- end header section -->
 
@@ -95,7 +113,7 @@ $description = $row['description'];
                             <p id="wholePrice">총 상품금액 : 0 원</p>
                         </div><hr>
                         <div class="pButton">
-                            <button type="button" id="basket" style="background-color:pink;" name="realButton">장바구니</button>
+                            <button type="button" id="basket" style="background-color:pink;" name="realButton" value="<?=$signer?>">장바구니</button>
                             <button type="button" name="realButton">즉시구매</button>
                         </div>
                     </div>
@@ -141,32 +159,64 @@ $description = $row['description'];
             });
 
             document.querySelector("#basket").addEventListener('click', () => {
-                
-                $.ajax({
-                type : 'POST',
-                url : 'Server/basket-add.php',
-                async : true,
-                data: JSON.stringify({
-                    "memberId" : <?=$id?>,
-                    "productId" : <?=$id?>,
-                    "productName" : '<?=$name?>',
-                    "productNum" : $('#cnt').val()
-                }),
-                success : function(result) { // 결과 성공 콜백함수
-                    console.log(result);
-                    var modal = document.getElementById("myModal");
-                    myModal.style.display = "block";
-                    var span = document.getElementById("return");
-                    span.onclick = function() {
-                    modal.style.display = "none";
-                }
-                },
-                error : function(request, status, error) { // 결과 에러 콜백함수
-                    console.log(error)
-                    alert("실패");
-                }
-                })
 
+                const sign = document.querySelector('#basket').value;
+
+                if(cnt.value == 0){
+                    alert('상품을 1개 이상 선택해주세요.');
+                    basket.preventDefault();
+                    basket.stopPropagation();
+                }
+                if(sign != "회원님"){
+                    $.ajax({
+                    type : 'POST',
+                    url : 'Server/basket-add.php',
+                    async : true,
+                    data: JSON.stringify({
+                        "memberId" : <?= $signer ?>,
+                        "productId" : '<?=$productId?>',
+                        "productName" : '<?=$name?>',
+                        "productNum" : $('#cnt').val()
+                    }),
+                    success : function(result) { // 결과 성공 콜백함수
+                        console.log(result);
+                        var modal = document.getElementById("myModal");
+                        myModal.style.display = "block";
+                        var span = document.getElementById("return");
+                        span.onclick = function() {
+                        modal.style.display = "none";
+                    }
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                        alert("실패");
+                    }
+                    })
+                }else{
+                    $.ajax({
+                    type : 'POST',
+                    url : 'Server/non-basket-add.php',
+                    async : true,
+                    data: JSON.stringify({
+                        "productId" : '<?=$productId?>',
+                        "productName" : '<?=$name?>',
+                        "productNum" : $('#cnt').val()
+                    }),
+                    success : function(result) { // 결과 성공 콜백함수
+                        console.log(result);
+                        var modal = document.getElementById("myModal");
+                        myModal.style.display = "block";
+                        var span = document.getElementById("return");
+                        span.onclick = function() {
+                        modal.style.display = "none";
+                    }
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                        alert("실패");
+                    }
+                    })
+                }
 
             });
         </script>

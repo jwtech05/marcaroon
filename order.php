@@ -35,7 +35,8 @@
 
   $totalprice = 0;
   $member = mysqli_fetch_array($mResult);
-
+  $array = [];
+  $priceArray = [];
 ?>
 <style>
   .orderform {
@@ -93,12 +94,12 @@ table{
     <div class="info">
       <table style="width:100%">
         <tr>
-          <th style="width: 15%;">이름</th>
-          <td><input style="width:300px;" type="text" class="form-control" name="aname" value="<?=$member['username']?>" required></td>
+          <th  style="width: 15%;">이름</th>
+          <td><input style="width:300px;" type="text" id="receiver" class="form-control" name="aname" value="<?=$member['username']?>" required></td>
         </tr>
         <tr>
           <th style="width: 15%;">연락처</th>
-          <td><input style="width:300px;" type="text" class="form-control" name="aname" value="<?=$member['phone']?>" required></td>
+          <td><input style="width:300px;" type="text" class="form-control" id="phoneNum" name="aname" value="<?=$member['phone']?>" required></td>
         </tr>
         <tr>
           <th style="width: 15%;">주소</th>
@@ -122,7 +123,7 @@ table{
         </tr>
         <tr>
           <th style="width: 15%;">주문메세지</th>
-          <td><input style="width:1200px; height:150px;" type="text" class="form-control" name="aname" value="" required></td>
+          <td><input type="text" style="width:1200px; height:150px;" class="form-control" id="comment" value="" class="form-control"></td>
         </tr>
       </table>
       </div>
@@ -154,6 +155,9 @@ table{
           $lastprice = $price * $productNum;
 
           $totalprice += $lastprice;
+          echo $basketId;
+          array_push($array, $row['basketId']);
+          array_push($priceArray, $lastprice);
           ?>
           <tr>
             <td><img src="product/macaroon/<?=$picture?>" alt="" style="width:70px; height:70px;"></td>
@@ -166,7 +170,12 @@ table{
                 <span id="single_<?=$productId?>"><?=$price?></span>
             </td>
           </tr>
-        <?php  }?>
+        <?php } 
+          $jsonarray = json_encode($array);
+          $jsonPriceArray = json_encode($priceArray);
+        ?>
+        <input type="hidden" id="basketIds" value=<?=$jsonarray?>>
+        <input type="hidden" id="prices" value=<?=$jsonPriceArray?>>
         <tr>
           <td colspan="3">Total:</td>
           <td id="totalprice" colspan="2"><?=$totalprice?></td>
@@ -194,7 +203,7 @@ table{
           if($totalprice > 10000){
             $shippay = 0;
           }else{
-            $hippay = 2700;
+            $shippay = 2700;
           }
           $lastprice = $totalprice + $shippay;
         ?>
@@ -231,7 +240,13 @@ table{
       </div>
   </div>
 <!-- 결제 정보 끝 -->
+
+<!-- 결제 버튼 시작--> 
+<div class="pButton">
+    <button type="button" id="paybutton" name="paybutton">결제하기</button>
+  </div>
 </div>
+<!-- 결제 버튼 끝--> 
 <!-- footer section -->
 <?php
     require('View/footer.php');
@@ -242,6 +257,9 @@ table{
 
 const address = document.querySelector('#sample4_roadAddress').value;
 const address2 = document.querySelector('#address2').value;
+//결제하기 버튼
+const paybutton = document.querySelector('#paybutton');
+
 
 function changeValue(input) {
   if (input.id === "origin") {
@@ -253,6 +271,39 @@ function changeValue(input) {
     }
 
 }
+
+paybutton.addEventListener('click', () => {
+  //배송정보
+    const receiver = document.querySelector('#receiver').value;
+    const phoneNum = document.querySelector('#phoneNum').value;
+    const comment = document.querySelector('#comment').value;
+    const readdress = document.querySelector('#sample4_roadAddress').value;
+    const readdress2 = document.querySelector('#address2').value;
+    const basketIds = document.querySelector('#basketIds').value;
+    const prices = document.querySelector('#prices').value;
+    $.ajax({
+      type : 'POST',
+      url : 'Server/order-add.php',
+      async : true,
+      data: JSON.stringify({
+        "receiver" : receiver,
+        "phoneNum" : phoneNum,
+        "address" : readdress,
+        "address2" : readdress2,
+        "comment" : comment,
+        "items" : basketIds,
+        "prices" : prices
+      }),
+      success : function(result) { // 결과 성공 콜백함수
+          console.log(result);
+          
+      },
+      error : function(request, status, error) { // 결과 에러 콜백함수
+          console.log(error)
+          alert("실패");
+      }
+    })
+  });
 
 
 

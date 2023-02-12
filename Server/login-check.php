@@ -25,12 +25,13 @@ $sqlPassword = $row['password'];
 //해당하는 아이디 칼럼의 비밀번호와 POST로 전송받은 비밀번호 비교
 
 if(password_verify($filtered['password'], $sqlPassword)){
-
-
+    if($row['authorId'] == 2){
+        $_SESSION["authorId"] = 2;
+    }
     $_SESSION["memberId"] = $row['memberId'];
     $cookie_name = '가입자';
     $cookie_value = $row['username'];
-    setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
+    setcookie($cookie_name, $cookie_value, time() + 3600, "/");
     mysqli_close($mysqli);
     echo " <script>
                 location.href = '../index.php';

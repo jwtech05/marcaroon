@@ -9,15 +9,15 @@
   $dbname = "opentutorials";
   
   $mysqli = new mysqli($servername, $username, $password, $dbname);
-  
-  if(isset($_COOKIE['가입자'])){
-      $id = $_SESSION["memberId"];
+
+  if(isset($_SESSION['memberId'])){
+    $signer = $_SESSION['memberId'];
   }else{
-    if(isset($_COOKIE['비가입자'])){
-      $id = $_COOKIE['비가입자'];
-    }
+    $signer = $_COOKIE['비가입자'];
   }
 
+  if(isset($_SESSION["memberId"])){
+    
   $sql = "
       SELECT basketId, member.memberId,picture, pName, productNum, price, product.productId 
       FROM member
@@ -25,11 +25,36 @@
       ON member.memberId = basket.memberId
       JOIN product 
       ON product.productId = basket.productId
-      WHERE member.memberId = '{$id}';
+      WHERE member.memberId = '{$_SESSION["memberId"]}';
   ";
-
+  }else{
+    $number = [];
+    $quantity = [];
+    foreach($_COOKIE as $key => $value){
+      if(is_numeric($key)){
+        array_push($number, $key); 
+        settype($value, "integer");
+        array_push($quantity, $value);
+      }
+    }
+    $number = implode(",", $number);
+    if(count($quantity) != 0){
+    $sql = "
+      SELECT picture, pName, price, product.productId 
+      FROM product
+      WHERE productId in ({$number});
+    ";
+    }else{
+      $sql = "
+      SELECT picture, pName, price, product.productId 
+      FROM product
+      WHERE productId = 60000;
+    ";
+    }
+  }
   $result = mysqli_query($mysqli, $sql);
   $totalprice = 0;
+  $i=0;
 ?>
 <style>
 .shopping-basket {
@@ -57,7 +82,7 @@ td, th {
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <body>
 <div class="shopping-basket">
-  <h2>장바구니</h2>
+  <h2><input type="hidden" id="signer" value="<?=$signer?>">장바구니</h2>
   <table>
     <tr>
       <hr style="height:2px; border-width: 2px;">
@@ -69,12 +94,21 @@ td, th {
     </tr>
     <?php while($row = mysqli_fetch_array($result)){
    
-      $basketId = $row['basketId'];
-      $picture = $row['picture'];
-      $pName = $row['pName'];
-      $productNum= $row['productNum'];
-      $price= $row['price'];
-      $productId = $row['productId'];
+      if(isset($_SESSION["memberId"])){
+        $basketId = $row['basketId'];
+        $picture = $row['picture'];
+        $pName = $row['pName'];
+        $productNum= $row['productNum'];
+        $price= $row['price'];
+        $productId = $row['productId'];
+      }else{
+        $basketId = $row['productId'];
+        $picture = $row['picture'];
+        $pName = $row['pName'];
+        $productNum = $quantity[$i];
+        $price= $row['price'];
+        $productId = $row['productId'];
+      }
 
       $lastprice = $price * $productNum;
 
@@ -97,7 +131,7 @@ td, th {
           <button type="button" id="delete_<?=$basketId?>"name="deletebutton">DELETE</button>
         </td>
       </tr>
-    <?php  }?>
+    <?php  $i++;}?>
     <tr>
       <td colspan="3">Total:</td>
       <td id="totalprice" colspan="2"><?=$totalprice?></td>
@@ -118,6 +152,7 @@ td, th {
       const downbuttons = document.querySelectorAll('[id^="down_"]');
       const editbuttons = document.querySelectorAll('[id^="edit_"]');
       const deletebuttons = document.querySelectorAll('[id^="delete_"]');
+      const sign = document.querySelector('#signer').value;
       //수량 올리는 버튼
       upbuttons.forEach(function(upbutton){
         upbutton.addEventListener('click', function() {
@@ -143,6 +178,7 @@ td, th {
       //바뀐 수량 적용 버튼
       editbuttons.forEach(function(editbutton){
         editbutton.addEventListener('click', function() {
+          
           const productId = editbutton.id.split('_')[1];
           const cnt = document.querySelector('#cnt_'+productId);
           const single = document.querySelector('#single_'+productId);
@@ -152,50 +188,88 @@ td, th {
           let newSingle = parseInt(single.innerHTML);
           let originevery = parseInt(every.innerHTML);
           let origintotal = parseInt(total.innerHTML);
-          console.log(count);
-          console.log(newSingle);
-          $.ajax({
-            type : 'POST',
-            url : 'Server/basket-edit.php',
-            async : true,
-            data: JSON.stringify({
-              "productNum" : count,
-              "productId" : productId
-            }),
-            success : function(result) { // 결과 성공 콜백함수
-                console.log(result);
-                alert("성공");
-                every.innerHTML = count * newSingle; 
-                total.innerHTML = origintotal - originevery + (count * newSingle);
-            },
-            error : function(request, status, error) { // 결과 에러 콜백함수
-                console.log(error)
-                alert("실패");
-            }
-          })     
+          if(sign != "회원님"){
+            $.ajax({
+              type : 'POST',
+              url : 'Server/basket-edit.php',
+              async : true,
+              data: JSON.stringify({
+                "productNum" : count,
+                "productId" : productId
+              }),
+              success : function(result) { // 결과 성공 콜백함수
+                  console.log(result);
+                  alert("성공");
+                  every.innerHTML = count * newSingle; 
+                  total.innerHTML = origintotal - originevery + (count * newSingle);
+              },
+              error : function(request, status, error) { // 결과 에러 콜백함수
+                  console.log(error)
+                  alert("실패");
+              }
+            })    
+          }else{
+            $.ajax({
+              type : 'POST',
+              url : 'Server/non-basket-edit.php',
+              async : true,
+              data: JSON.stringify({
+                "productNum" : count,
+                "productId" : productId
+              }),
+              success : function(result) { // 결과 성공 콜백함수
+                  console.log(result);
+                  alert("성공");
+                  every.innerHTML = count * newSingle; 
+                  total.innerHTML = origintotal - originevery + (count * newSingle);
+              },
+              error : function(request, status, error) { // 결과 에러 콜백함수
+                  console.log(error)
+                  alert("실패");
+              }
+            })    
+          }
         });
       });
 
       deletebuttons.forEach(function(deletebutton){
         deletebutton.addEventListener('click', function() {
             const basketId = deletebutton.id.split('_')[1];
-
+            if(sign != "회원님"){
+              $.ajax({
+                type : 'POST',
+                url : 'Server/basket-delete.php',
+                async : true,
+                data: JSON.stringify({
+                  "basketId" : basketId
+                }),
+                success : function(result) { // 결과 성공 콜백함수
+                    console.log(result);
+                    location.href='./Server/basket-delete.php';
+                },
+                error : function(request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                    alert("실패");
+                }
+              })   
+          }else{
             $.ajax({
-            type : 'POST',
-            url : 'Server/basket-delete.php',
-            async : true,
-            data: JSON.stringify({
-              "basketId" : basketId
-            }),
-            success : function(result) { // 결과 성공 콜백함수
-                console.log(result);
-                location.href='./Server/basket-delete.php';
-            },
-            error : function(request, status, error) { // 결과 에러 콜백함수
-                console.log(error)
-                alert("실패");
-            }
-          })   
+                type : 'POST',
+                url : 'Server/non-basket-delete.php',
+                async : true,
+                data: JSON.stringify({
+                  "basketId" : basketId
+                }),
+                success : function(result) { // 결과 성공 콜백함수
+                    console.log(result);
+                    location.href='./basket.php';
+                },
+                error : function(request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                    alert("실패");
+                }
+              })   
+          }
         });
       });
 </script>

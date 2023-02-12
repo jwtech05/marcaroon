@@ -24,7 +24,7 @@ $filtered = array(
 
 $passwordHash = password_hash($filtered['password'], PASSWORD_DEFAULT);
 
-$author = 1;
+$author = 2;
 
 settype($filtered['phone'],"integer");
 

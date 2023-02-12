@@ -1,7 +1,7 @@
-
 <!DOCTYPE html>
+<?php session_start();
+?>
 <html>
-   <?php session_start(); ?>
    <head>
       <!-- Basic -->
       <meta charset="utf-8" />
@@ -56,19 +56,16 @@
                         </li>
                         <li class="nav-item">
                            <?php
-                              if(!isset($_COOKIE['비가입자'])){
-                                 $cookie_name = '비가입자';
-                                 $cookie_value = "EEEEEEEE";
-                                 setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
-                              }
-                              if(isset($_SESSION["memberId"])){
-                                 $post = implode(" ",$_POST);
-                                 $postSlice = explode(" ", $post);
-                                 $id = $postSlice[0];
+                           if(!isset($_COOKIE['비가입자'])){
+                              $cookie_name = '비가입자';
+                              $cookie_value = "회원님";
+                              setcookie($cookie_name, $cookie_value, time() + (3600), "/");
+                           }
+                           if(isset($_SESSION["memberId"])){
                            ?>
-                              <a class="nav-link" href="login.php">로그아웃</a>
+                           <a class="nav-link" href="Server/logout-reset.php" >로그아웃</a>
                            <?php
-                           }else{
+                        }else{
                            ?>
                            <a class="nav-link" href="login.php">로그인</a>
                            <?php

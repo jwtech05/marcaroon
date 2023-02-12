@@ -52,8 +52,10 @@ $result = mysqli_query($mysqli, $sql);
                            </a>'?>
                            <!-- 관리자가 사용할 수 있는 수정/삭제 기능-->
                            <?php
-                              echo '<a href="admin-product.php?id='.$id.'" class="option2"> 수정 </a>';
-                              echo '<a href="server/product-delete.php?id='.$id.'" class="option2"> 삭제 </a>';
+                              if(isset($_SESSION['authorId'])){
+                                 echo '<a href="admin-product.php?id='.$id.'" class="option2"> 수정 </a>';
+                                 echo '<a href="server/product-delete.php?id='.$id.'" class="option2"> 삭제 </a>';
+                              }
                            ?>
                         </div>
                      </div>
@@ -77,9 +79,11 @@ $result = mysqli_query($mysqli, $sql);
 
             </div>
             <div class="btn-box">
-               <a href="">
-                  추가하기
-               </a>
+               <?php
+                if(isset($_SESSION['authorId'])){
+                 echo '<a href="">추가하기 </a>';
+                }
+               ?>
             </div>
          </div>
       </section>
