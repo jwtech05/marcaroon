@@ -128,6 +128,15 @@
                               </svg>
                            </a>
                         </li>
+                        <li class="nav-item">
+                        <?php
+                           if(isset($_SESSION["memberId"])){
+                              ?>
+                              <a class="nav-link" href="mypage.php" >마이페이지</a>
+                        <?php
+                           }
+                        ?>
+                        </li>
                         <form class="form-inline">
                            <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
                            <i class="fa fa-search" aria-hidden="true"></i>
