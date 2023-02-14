@@ -36,8 +36,8 @@ $i = 0;
 while($row = mysqli_fetch_array($result)){
     //주문 추가 부분
    $orderAdd = "
-        INSERT opentutorials.order (memberId, productId, date, receiver, address, contactnum, productnum, saleprice, message)
-        VALUES ( '{$row['memberId']}','{$row['productId']}', now(), '$receiver', '$address', '$phoneNum', '{$row['productNum']}', '$prices[$i]', '$comment')
+        INSERT opentutorials.order (memberId, productId, date, changedate, receiver, address, contactnum, productnum, saleprice, message, dstatus)
+        VALUES ( '{$row['memberId']}','{$row['productId']}', now(), now(),'$receiver', '$address', '$phoneNum', '{$row['productNum']}', '$prices[$i]', '$comment', 1)
    ";
    $orderAddResult = mysqli_query($mysqli, $orderAdd);
     //주문 완료된 장바구니 삭제 부분
@@ -52,6 +52,12 @@ while($row = mysqli_fetch_array($result)){
     }
     $i++;
 }
-header("Location: ../test.php")
+if($result === false){
+    echo '품목수정에 실패하셨습니다.';
+    error_log(mysqli_error($conn));
+} else{
+    echo '품목이 성공적으로 수정 되었습니다.';
+}
+$mysqli->close();
 
 ?>

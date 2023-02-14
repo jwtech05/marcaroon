@@ -32,6 +32,9 @@ if(password_verify($filtered['password'], $sqlPassword)){
     $cookie_name = '가입자';
     $cookie_value = $row['username'];
     setcookie($cookie_name, $cookie_value, time() + 3600, "/");
+    $cookie_name = '번호';
+    $cookie_value = $row['memberId'];
+    setcookie($cookie_name, $cookie_value, time() + 3600, "/");
     mysqli_close($mysqli);
     echo " <script>
                 location.href = '../index.php';

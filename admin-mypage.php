@@ -11,28 +11,24 @@
 </head>
 <?php require('view/header.php'); ?>
 <body>
-<div id="app"><?= $_COOKIE['가입자']?> 마이페이지</div>
+<div id="app">관리자페이지</div>
 <nav class="mypage-nav">
     <div id="lists">
-        <router-link id="list" to="/orderlist">주문내역</router-link>  
-        <router-link id="list" to="/memberInfo">회원정보</router-link> 
-        <router-link id="list" to="/review">테스팅</router-link> 
+        <router-link id="list" to="/memberOrderList">주문관리</router-link>  
+        <router-link id="list" to="/memberInfo">회원관리</router-link> 
         <router-view></router-view> 
     </div>
 </nav>
 
 <?php require('view/footer.php'); ?>
 </body>
-<!-- 필요한 Vue CDN 코드(router로 연결된 vue 페이지에도 적용된다.)-->
+
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
 <script src="https://unpkg.com/vue-cookies@1.8.2/vue-cookies.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jw-vue-pagination@1.0.3/lib/JwPagination.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-paginate/3.6.0/vue-paginate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vuejs-paginate/2.1.0/index.js"></script>
 <script>
 
-// html에서 vue 페이지로 router를 가능하게 해주는 라이브러리
 const options = {
       moduleCache: {
         vue: Vue
@@ -59,22 +55,28 @@ const { createApp } = Vue
 
 const cookie = JSON.parse(this.$cookies.get('가입자'))
 
+//백엔드 추가로 볼수있으면 보기, ex)next.js
 
-//마이페이지 리스트 route 연결
+createApp({
+  data() {
+    return {
+      name: '회원님!!!!',
+      cookie : cookie
+    }
+  }
+}).mount('#app')
+
 var routes = [
-      {path: '/', redirect: '/orderlist'}, 
+      {path: '/', redirect: '/memberOrderList'}, 
       {
-          path:'/orderlist',
-          component: Vue.defineAsyncComponent(() => loadModule('./mypageLists/orderlist.vue', options)),
+          path:'/memberOrderList',
+          component: Vue.defineAsyncComponent(() => loadModule('./adminpageLists/memberOrderList.vue', options)),
       },
       {
           path:'/memberInfo',
-          component:Vue.defineAsyncComponent(() => loadModule('./mypageLists/memberInfo.vue', options)),
+          component:Vue.defineAsyncComponent(() => loadModule('./adminpageLists/memberList.vue', options)),
       },
-      {
-          path:'/review',
-          component:Vue.defineAsyncComponent(() => loadModule('./mypageLists/review.vue', options)),
-      }
+
 ];
 
 const router = VueRouter.createRouter({
@@ -92,7 +94,7 @@ lists.mount('#lists')
 </script>
   <style scoped>
   #app {
-    background: #f77b81;
+    background: #fad3a6;
     text-align: center;
     color: #fff;
     padding-top: 50px;

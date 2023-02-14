@@ -219,27 +219,7 @@ table{
   </div>
 <!-- 가격 정보 끝 -->
 
-<!-- 결제 정보 시작 -->  
-  <div class ="productinfo">
-    <h2>결제 정보</h2>
-    <hr style="height:2px; border-width: 2px;">
-    <div class="info">
-      <table style="width:100%">
-        <tr>
-          <th style="width: 15%;">결제방법</th>
-          <td>  
-            <input type="radio" id="age1" name="age" value="30">
-            <label for="age1">카카오페이</label><br>
-            <input type="radio" id="age2" name="age" value="60">
-            <label for="age2">신용카드</label><br>  
-            <input type="radio" id="age3" name="age" value="100">
-            <label for="age3">네이버페이</label><br><br>
-          </td>
-        </tr>
-      </table>
-      </div>
-  </div>
-<!-- 결제 정보 끝 -->
+
 
 <!-- 결제 버튼 시작--> 
 <div class="pButton">
@@ -271,7 +251,7 @@ function changeValue(input) {
     }
 
 }
-
+//결제하기 버튼
 paybutton.addEventListener('click', () => {
   //배송정보
     const receiver = document.querySelector('#receiver').value;
@@ -296,7 +276,7 @@ paybutton.addEventListener('click', () => {
       }),
       success : function(result) { // 결과 성공 콜백함수
           console.log(result);
-          
+          location.replace('./mypage.php')
       },
       error : function(request, status, error) { // 결과 에러 콜백함수
           console.log(error)

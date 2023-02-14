@@ -38,21 +38,9 @@
                         <li class="nav-item active">
                            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                         </li>
-                       <li class="nav-item dropdown">
-                           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">회사소개 <span class="caret"></span></a>
-                           <ul class="dropdown-menu">
-                              <li><a href="about.html">About</a></li>
-                              <li><a href="testimonial.html">Testimonial</a></li>
-                           </ul>
-                        </li>
+                       
                         <li class="nav-item">
                            <a class="nav-link" href="product.php">마카롱</a>
-                        </li>
-                        <li class="nav-item">
-                           <a class="nav-link" href="first.php">공지사항</a>
-                        </li>
-                        <li class="nav-item">
-                           <a class="nav-link" href="contact.html">문의</a>
                         </li>
                         <li class="nav-item">
                            <?php
@@ -130,9 +118,15 @@
                         </li>
                         <li class="nav-item">
                         <?php
+                        //로그인 한게 어드민일 어드민 세션 생성 됨, 어드민 세션 없으면 일반 로그인
                            if(isset($_SESSION["memberId"])){
+                              if(isset($_SESSION["authorId"])){
+                                 $mypageUrl = 'admin-mypage.php';
+                              }else{
+                                 $mypageUrl = 'mypage.php';
+                              }
                               ?>
-                              <a class="nav-link" href="mypage.php" >마이페이지</a>
+                              <a class="nav-link" href="<?= $mypageUrl ?>" >마이페이지</a>
                         <?php
                            }
                         ?>
