@@ -68,7 +68,7 @@ if(isset($_SESSION['memberId'])){
 }else{
     $signer = $_COOKIE['비가입자'];
 }
-echo $signer;
+
 $sql = "
     SELECT * FROM product WHERE productId='{$id}'
 ";
@@ -113,13 +113,14 @@ $description = $row['description'];
                             <p id="wholePrice">총 상품금액 : 0 원</p>
                         </div><hr>
                         <div class="pButton">
-                            <button type="button" id="basket" style="background-color:pink;" name="realButton" value="<?=$signer?>">장바구니</button>
-                            <button type="button" name="realButton">즉시구매</button>
+                            <button type="button" id="basket" style="background-color:pink;"  value="<?=$signer?>">장바구니</button>
+                            <button type="button" id="rightaway" value="<?=$signer?>">즉시구매</button>
                         </div>
                     </div>
                 </div>
             </section>
         <!-- end productInfo section -->
+
         <!-- modal section start-->
         <div id="myModal" class="modal">
             <div class="modal-content" style="width:500px;">
@@ -131,11 +132,13 @@ $description = $row['description'];
             </div>
         </div>
         <!-- modal section end-->
-      <!-- footer start -->
-      <?php
-         require('view/footer.php')
-      ?>
-      <!-- footer end -->
+
+        <!-- footer start -->
+        <?php
+            require('view/footer.php')
+        ?>
+        <!-- footer end -->
+
       <script src="http://code.jquery.com/jquery-latest.min.js"></script>
       <script>
             const cnt = document.querySelector('#cnt');
@@ -157,7 +160,7 @@ $description = $row['description'];
                     wholePrice.innerHTML = "총 상품금액 : " + count *  <?=$price?>+"원";
                 }
             });
-
+            //장바구니용
             document.querySelector("#basket").addEventListener('click', () => {
 
                 const sign = document.querySelector('#basket').value;
@@ -208,8 +211,8 @@ $description = $row['description'];
                         myModal.style.display = "block";
                         var span = document.getElementById("return");
                         span.onclick = function() {
-                        modal.style.display = "none";
-                    }
+                            modal.style.display = "none";
+                        }
                     },
                     error : function(request, status, error) { // 결과 에러 콜백함수
                         console.log(error)
@@ -219,6 +222,60 @@ $description = $row['description'];
                 }
 
             });
+
+            //즉시구매용
+            document.querySelector("#rightaway").addEventListener('click', () => {
+                console.log("여긴 들어와?");
+                const sign = document.querySelector('#basket').value;
+                console.log("여긴 들어와?");
+                if(cnt.value == 0){
+                    alert('상품을 1개 이상 선택해주세요.');
+                    basket.preventDefault();
+                    basket.stopPropagation();
+                }
+                if(sign != "회원님"){
+                    $.ajax({
+                    type : 'POST',
+                    url : 'Server/basket-add.php',
+                    async : true,
+                    data: JSON.stringify({
+                        "memberId" : <?= $signer ?>,
+                        "productId" : '<?=$productId?>',
+                        "productName" : '<?=$name?>',
+                        "productNum" : $('#cnt').val()
+                    }),
+                    success : function(result) { // 결과 성공 콜백함수
+                        console.log(result);
+                        window.location.href = "./order.php";
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                        alert("실패");
+                    }
+                    })
+                }else{
+                    $.ajax({
+                    type : 'POST',
+                    url : 'Server/non-basket-add.php',
+                    async : true,
+                    data: JSON.stringify({
+                        "productId" : '<?=$productId?>',
+                        "productName" : '<?=$name?>',
+                        "productNum" : $('#cnt').val()
+                    }),
+                    success : function(result) { // 결과 성공 콜백함수
+                        console.log(result);
+                        window.location.href = "./order.php";
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                        alert("실패");
+                    }
+                    })
+                }
+
+            });
+            
         </script>
    </body>
 </html>

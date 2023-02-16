@@ -1,3 +1,29 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "pchris3528p!!";
+$dbname = "opentutorials";
+
+$mysqli = new mysqli($servername, $username, $password, $dbname);
+
+function bColor() {
+   $red = rand(0, 255);
+   $green = rand(0, 255);
+   $blue = rand(0, 255);
+   return "background-color: rgb($red, $green, $blue)";
+ }
+
+$productInfo = "
+   SELECT * FROM product;
+";
+
+$Result = mysqli_query($mysqli, $productInfo);
+
+$member = mysqli_fetch_array($Result);
+
+?>
+
+
 <!DOCTYPE html>
 <html>
          <!--start header section -->
@@ -143,211 +169,46 @@
                </h2>
             </div>
             <div class="row">
+               <?php
+                  for($i=3; $i<12; $i++){
+                     $row = mysqli_fetch_array($Result);
+                     $id = $row['productId'];
+                     $name = $row['pName'];
+                     $picture = $row['picture'];
+                     $price = $row['price'];
+               ?>
                <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #c8ff00'>
+                  <div class="box" style="<?php echo bColor() ?>">
                      <div class="option_container">
                         <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="메론맛.png">Buy Now</button>           
+                           <form method="GET" action="macaroon.php">
+                              <button type="submit" class="option1" name="id" value="<?= $id ?>">Buy Now</button>           
                            </form>
                         </div>
                      </div>
                      <div class="img-box">
-                        <img src="product/macaroon/메론마카롱.png" alt="">
+                        <img src="product/macaroon/<?=$picture?>" alt="">
                      </div>
-                     <div class="detail-box">
+                     <div class="detail-box" >
                         <h5>
-                           Melon Flavor
+                           <?= $name ?>
                         </h5>
                         <h6>
-                           2000won
+                           <?php echo $price ?>원
                         </h6>
                      </div>
                   </div>
                </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #f700ff'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="계란빵맛.png">Buy Now</button>           
-                           </form>
-                        </div>
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/계란빵마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           EggBread Flavor
-                        </h5>
-                        <h6>
-                           2000won
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #00e1ff'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="레몬맛.png">Buy Now</button>           
-                           </form>
-                        </div>
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/레몬마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           Lemon Flavor
-                        </h5>
-                        <h6>
-                           2000won
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #ff0000'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="브라우니맛.png">Buy Now</button>           
-                           </form>
-                        </div>   
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/브라우니마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           Brownie Flavor
-                        </h5>
-                        <h6>
-                           3000won
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #00ff00'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="블루베리치약맛.png">Buy Now</button>           
-                           </form>
-                        </div> 
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/블루베리치약마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           BlueBerry Flavor
-                        </h5>
-                        <h6>
-                           3000won
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #6f00ff'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="사랑에빠진딸기맛.png">Buy Now</button>           
-                           </form>
-                        </div> 
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/사랑에빠진딸기마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           FallInLove Flavor
-                        </h5>
-                        <h6>
-                           3000won
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #ffa600'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="체리초코맛.png">Buy Now</button>           
-                           </form>
-                        </div> 
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/체리초코마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           WaterMelon Flavor
-                        </h5>
-                        <h6>
-                           4000원
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #0099ff'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="빼빼로맛.png">Buy Now</button>           
-                           </form>
-                        </div> 
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/빼빼로마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           Pepero Flavor
-                        </h5>
-                        <h6>
-                           4000won
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-md-4 col-lg-4">
-                  <div class="box" style='background-color: #ffee00'>
-                     <div class="option_container">
-                        <div class="options">
-                           <form method="GET" action="macaron.php">
-                              <button type="submit" class="option1" name="num" value="피스타치오맛.png">Buy Now</button>           
-                           </form>
-                        </div> 
-                     </div>
-                     <div class="img-box">
-                        <img src="product/macaroon/피스타치오마카롱.png" alt="">
-                     </div>
-                     <div class="detail-box">
-                        <h5>
-                           Pistachio Flavor
-                        </h5>
-                        <h6>
-                           4000won
-                        </h6>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="btn-box">
-               <a href="">
+               <?php
+                  }
+               ?>
+
+         </div>
+         <div class="btn-box" style="display: flex; justify-content: center; align-items: center;">
+               <a href="./product.php">
                View All products
                </a>
             </div>
-         </div>
       </section>
       <!-- end product section -->
       <!-- start footer section -->
@@ -355,6 +216,6 @@
          require('view/footer.php')
       ?>
       <!-- end footer section -->
-
    </body>
+                  
 </html>

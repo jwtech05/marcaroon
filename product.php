@@ -76,12 +76,12 @@ $result = mysqli_query($mysqli, $sql);
                }
 
             ?>
-
+            <!-- 추가하기 기능 -->
             </div>
             <div class="btn-box">
                <?php
                 if(isset($_SESSION['authorId'])){
-                 echo '<a href="">추가하기 </a>';
+                 echo '<a href="./productadd.php">추가하기 </a>';
                 }
                ?>
             </div>

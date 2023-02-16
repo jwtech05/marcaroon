@@ -28,8 +28,22 @@
       <!--회원수정 post 버튼-->
       <div class="pButton">
         <button type="button" @click="newInfo">회원정보 수정하기</button>
+        <p></p>
+        <div>
+        <button type="button" @click="showAlert" style="width: 100px; background-color:#fae2e7; border:#fae2e7">탈퇴하기</button>
+        <div v-if="show">
+          <div>
+            {{ message }}
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <button @click="ok" style="width: 100px; background-color:#fae2e7; border:#fae2e7" >예</button>
+            <button @click="cancel" style="width: 100px; background-color:#fae2e7;" > 아니요</button>
+          </div>
+        </div>
       </div>
     </div>
+      </div>
+
 </template>
 
 <script>
@@ -42,7 +56,10 @@ export default {
           email : null,
           phone : null,
           address : null,
-          address2 : null
+          address2 : null,
+          //모달창 멘트
+          message : "정말 탈퇴하시겠습니까?",
+          show : false,
       };
   },
   methods: {
@@ -58,7 +75,24 @@ export default {
                 address2 : this.address2
 
             })
-    }
+    },
+
+    //모달창 보여주는 버튼
+    showAlert() {
+      this.show = true;
+    },
+    //모달 오케이 버튼
+    async ok() {
+      this.show = false;
+      axios.post('./server/register-signout.php');
+      alert("탈퇴가 완료되었습니다.");
+      window.location.href = "./index.php";
+    },
+    //모달창 취소 버튼
+    cancel() {
+      this.show = false;
+
+    },
   },
   //회원정보 가져오는 axios
   async mounted() {

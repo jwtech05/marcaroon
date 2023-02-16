@@ -37,7 +37,8 @@
     <!--페이지네이션 기능-->
       <div class="pagination">
         <p @click="backwardpage(nowpage)">&laquo;</p>
-          <p v-for="(item , index) in totalPages" :key="index" @click="pagechange(index+1)" :style="[ index+1 === nowpage ? { 'background-color': '#f77b81'} : {'background-color': 'white'}]">
+          <p v-for="(item , index) in totalPages" :key="index" @click="pagechange(index+1)" 
+          :style="[ index+1 === nowpage ? { 'background-color': '#f77b81'} : {'background-color': 'white'}]">
             {{ index + 1 }}
           </p>
         <p @click="forwardpage(nowpage)">&raquo;</p>

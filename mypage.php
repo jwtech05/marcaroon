@@ -16,7 +16,6 @@
     <div id="lists">
         <router-link id="list" to="/orderlist">주문내역</router-link>  
         <router-link id="list" to="/memberInfo">회원정보</router-link> 
-        <router-link id="list" to="/review">테스팅</router-link> 
         <router-view></router-view> 
     </div>
 </nav>

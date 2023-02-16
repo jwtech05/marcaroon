@@ -29,6 +29,6 @@ if($result === false){
     error_log(mysqli_error($conn));
 } else{
     echo '품목이 성공적으로 수정 되었습니다.';
-    header("Location: product.php");
+    header("Location: ../product.php");
 }
 ?>

@@ -6,6 +6,7 @@ $dbname = "opentutorials";
 
 $mysqli = new mysqli($servername, $username, $password, $dbname);
 
+settype($_COOKIE['번호'], "integer");
 
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -28,14 +29,14 @@ $sql = "
     address = '{$filtered['address']}',
     address2 ='{$filtered['address2']}',
     lastUpdate = now()
-    WHERE memberId = 13
+    WHERE memberId = {$_COOKIE['번호']};
 ";
 $result = mysqli_query($mysqli, $sql);
 if($result === false){
-    echo '품목수정에 실패하셨습니다.';
+    echo '회원정보 수정에 실패하셨습니다.';
     error_log(mysqli_error($conn));
 } else{
-    echo '품목이 성공적으로 수정 되었습니다.';
+    echo '회원정보 수정이 성공적으로 수정 되었습니다.';
 }
 $mysqli->close();
 ?>
