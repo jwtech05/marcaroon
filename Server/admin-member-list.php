@@ -1,10 +1,6 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
-
-$mysqli = new mysqli($servername, $username, $password, $dbname);
+//mysql 접속
+require('./mysql-connect.php');
 
 $basketInfo = "
 SELECT * , date_format(enrollDate, '%y/%m/%d') as enrollDate, date_format(lastUpdate, '%y/%m/%d') as lastUpdate

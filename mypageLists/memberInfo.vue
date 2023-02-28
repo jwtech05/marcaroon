@@ -65,6 +65,7 @@ export default {
   methods: {
     //회원정보 수정 post 하는 axios
     async newInfo() {
+      alert("회원정보 수정이 완료되었습니다.");
         axios
             .post('./server/member-edit.php', {
 

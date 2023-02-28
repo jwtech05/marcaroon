@@ -108,6 +108,16 @@
 
 <script>
   document.querySelector(".submit-btn").addEventListener('click', () => {
+    //로그인 비밀번호 미입력 방지
+    const idValue = $('#id').val();
+    const passwordValue = $('#password').val();
+    if (!idValue || !passwordValue) {
+      alert('아이디와 비밀번호를 입력해주세요.');
+      event.preventDefault();
+    
+      return;
+    }
+    //로그인 폼 보내기
     $.ajax({
       type : 'POST',
       url : 'index.php',
@@ -126,6 +136,4 @@
       }
     })
   });
-
-  
 </script>

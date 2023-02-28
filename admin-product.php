@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
     <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
+//mysql 접속
 
-$mysqli = new mysqli($servername, $username, $password, $dbname);
 $id = $_GET["id"];
 $sql = "
     SELECT * FROM product WHERE productId='{$id}'

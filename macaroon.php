@@ -44,12 +44,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 </style>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
-
-$mysqli = new mysqli($servername, $username, $password, $dbname);
 
 $id = $_GET["id"];
 
@@ -74,6 +68,7 @@ $sql = "
 ";
 $result = mysqli_query($mysqli, $sql);
 $row = mysqli_fetch_array($result);
+
 $productId = $row['productId'];
 $name = $row['pName'];
 $price = $row['price'];

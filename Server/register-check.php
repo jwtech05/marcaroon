@@ -1,10 +1,6 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
-
-$mysqli = new mysqli($servername, $username, $password, $dbname);
+//mysql 접속
+require('./mysql-connect.php');
 
 
 var_dump($_POST);
@@ -30,6 +26,7 @@ settype($filtered['phone'],"integer");
 
 //주소값 상세주소와 합침
 $address = $filtered['address']." ".$filtered['address2'];
+
 var_dump($address);
 
 //성별 int 값으로 변환(남자는 1 여자는 2)

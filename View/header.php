@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php session_start();
+require('./server/mysql-connect.php'); 
 ?>
 <html>
    <head>

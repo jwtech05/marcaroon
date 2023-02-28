@@ -1,11 +1,7 @@
 <?php
 session_start();
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
-
-$mysqli = new mysqli($servername, $username, $password, $dbname);
+//mysql 접속
+require('./mysql-connect.php');
 
 
 $filtered = array(
@@ -13,21 +9,24 @@ $filtered = array(
     'password'=>mysqli_real_escape_string($mysqli, $_POST['userPassword']),
   );
 
+//전송받은 비밀번호 해쉬화
 $passwordHash = password_hash($filtered['password'], PASSWORD_DEFAULT);
 
 $sql = "
     SELECT * FROM member where Id = '{$filtered['name']}'
 ";
 $result = mysqli_query($mysqli, $sql);
+
 $row = mysqli_fetch_array($result);
 
 $sqlPassword = $row['password'];
-//해당하는 아이디 칼럼의 비밀번호와 POST로 전송받은 비밀번호 비교
 
+//해당하는 아이디 칼럼의 비밀번호와 POST로 전송받은 비밀번호 비교
 if(password_verify($filtered['password'], $sqlPassword)){
     if($row['authorId'] == 2){
         $_SESSION["authorId"] = 2;
     }
+    //로그인 성공시 특정쿠키와 세션 지정
     $_SESSION["memberId"] = $row['memberId'];
     $cookie_name = '가입자';
     $cookie_value = $row['username'];
@@ -44,7 +43,8 @@ if(password_verify($filtered['password'], $sqlPassword)){
         </script>";
 }else{
     echo"<script>alert('비밀번호가 아이디와 일치하지 않습니다.');</script>";
-    echo "비밀번호가 아이디와 일치하지 않습니다.";
-    
+    echo " <script>
+                location.href = '../login.php';
+           </script>";
 }
 ?>

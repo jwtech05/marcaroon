@@ -1,11 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
+//mysql 접속
+require('view/header.php');
 
-$mysqli = new mysqli($servername, $username, $password, $dbname);
-
+//배경화면 쿠키 배경색깔 전환`
 function bColor() {
    $red = rand(0, 255);
    $green = rand(0, 255);
@@ -28,7 +25,7 @@ $member = mysqli_fetch_array($Result);
 <html>
          <!--start header section -->
       <?php
-         require('view/header.php');
+
 
       ?>
          <!-- end header section -->

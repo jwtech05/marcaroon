@@ -2,12 +2,8 @@
 <html>
 <?php
   require('view/header.php');
-  $servername = "localhost";
-  $username = "root";
-  $password = "pchris3528p!!";
-  $dbname = "opentutorials";
-  
-  $mysqli = new mysqli($servername, $username, $password, $dbname);
+  //mysql 접속
+  require('./server/mysql-connect.php'); 
 
   if(isset($_COOKIE['가입자'])){
       $id=$_SESSION['memberId'];

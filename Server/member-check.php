@@ -1,10 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
+//mysql 접속
+require('./mysql-connect.php');
 
-$mysqli = new mysqli($servername, $username, $password, $dbname);
+
 settype($_COOKIE['번호'], "integer");
 $memberInfo = "
     SELECT *, CONCAT(address,' ',address2) as addresses 

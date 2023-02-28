@@ -1,10 +1,6 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
-
-$mysqli = new mysqli($servername, $username, $password, $dbname);
+//mysql 접속
+require('./mysql-connect.php');
 
 settype($_COOKIE['번호'], "integer");
 
@@ -36,7 +32,10 @@ if($result === false){
     echo '회원정보 수정에 실패하셨습니다.';
     error_log(mysqli_error($conn));
 } else{
-    echo '회원정보 수정이 성공적으로 수정 되었습니다.';
+    echo"<script>
+        alert(회원정보 수정이 성공적으로 수정 되었습니다.);
+    </script>";
 }
+
 $mysqli->close();
 ?>

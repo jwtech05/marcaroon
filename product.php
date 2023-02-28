@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
 
-$mysqli = new mysqli($servername, $username, $password, $dbname);
+require('View/header.php');
 $sql = "SELECT * FROM product";
 
 $result = mysqli_query($mysqli, $sql);
-   require('View/header.php');
+
 ?>
       <!-- inner page section -->
       <section class="inner_page_head">

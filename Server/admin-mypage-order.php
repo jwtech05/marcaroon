@@ -1,10 +1,6 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "pchris3528p!!";
-$dbname = "opentutorials";
-
-$mysqli = new mysqli($servername, $username, $password, $dbname);
+//mysql 접속
+require('./mysql-connect.php');
 
 $basketInfo = "
 SELECT member.memberId, orderId,username ,date_format(date, '%y/%m/%d') as date, pName ,saleprice, changedate, productNum,

@@ -3,12 +3,8 @@
 <!-- header 시작 -->
 <?php
   require('View/header.php');
-  $servername = "localhost";
-  $username = "root";
-  $password = "pchris3528p!!";
-  $dbname = "opentutorials";
-  
-  $mysqli = new mysqli($servername, $username, $password, $dbname);
+//mysql 접속
+
 
   if(isset($_SESSION['memberId'])){
     $signer = $_SESSION['memberId'];
